@@ -24,7 +24,7 @@
 
 @media screen and (max-width: 900px) {
   .promo {
-    padding: 300px var(--side-padding-m) 70px;
+    padding: 300px 44px 70px;
     gap: 140px;
   }
 
@@ -40,7 +40,7 @@
 
 @media screen and (max-width: 420px) {
   .promo {
-    padding: 183px var(--side-padding-s) 40px;
+    padding: 183px 10px 40px;
     gap: 60px;
   }
 

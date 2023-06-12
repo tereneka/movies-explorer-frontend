@@ -13,7 +13,6 @@ body {
   --success-color: #2be080;
   --muted-text-color: #a0a0a0;
   --side-padding-l: 70px;
-  --side-padding-m: 44px;
-  --side-padding-s: 10px;
   --border-radius-s: 3px;
+  --border-radius-m: 10px;
 }
