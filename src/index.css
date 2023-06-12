@@ -1,3 +1,5 @@
+@import url(./vendor/fonts/inter.css);
+
 body {
   margin: 0;
   font-family: 'Inter', Arial, sans-serif;
@@ -7,4 +9,11 @@ body {
 
 :root {
   --dark-color: #073042;
+  --light-color: #ffffff;
+  --success-color: #2be080;
+  --muted-text-color: #a0a0a0;
+  --side-padding-l: 70px;
+  --side-padding-m: 44px;
+  --side-padding-s: 10px;
+  --border-radius-s: 3px;
 }
