@@ -10,9 +10,11 @@ body {
 :root {
   --dark-color: #073042;
   --light-color: #ffffff;
+  --primary-color: #3456f3;
   --success-color: #2be080;
   --muted-text-color: #a0a0a0;
   --side-padding-l: 70px;
-  --border-radius-s: 3px;
+  --border-radius-xs: 3px;
+  --border-radius-s: 5px;
   --border-radius-m: 10px;
 }

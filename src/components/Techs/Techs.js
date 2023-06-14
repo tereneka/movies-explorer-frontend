@@ -20,7 +20,9 @@ function Techs() {
 
       <ul className='techs__list'>
         {techs.map((item) => (
-          <li className='techs__list-item'>
+          <li
+            className='techs__list-item'
+            key={item}>
             {item}
           </li>
         ))}

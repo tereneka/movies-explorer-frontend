@@ -18,7 +18,7 @@
   background: var(--success-color);
   color: var(--dark-color);
   padding: 8px 20px;
-  border-radius: var(--border-radius-s);
+  border-radius: var(--border-radius-xs);
 }
 
 @media screen and (max-width: 420px) {
