@@ -12,9 +12,12 @@ body {
   --light-color: #ffffff;
   --primary-color: #3456f3;
   --success-color: #2be080;
+  --error-color: #ff3055;
   --muted-text-color: #a0a0a0;
   --side-padding-l: 70px;
   --border-radius-xs: 3px;
   --border-radius-s: 5px;
   --border-radius-m: 10px;
+  --border-radius-l: 16px;
+  --border-radius-xl: 30px;
 }

@@ -11,17 +11,29 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Header from '../Header/Header';
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
-import { moviesCardList } from '../../constants';
+import {
+  moviesCardList,
+  savedMoviesCardList,
+} from '../../constants';
+import { checkMoviesList } from '../../utils/utils';
 
 function App() {
   const [isNavModalOpen, setIsNavModalOpen] =
     useState(false);
 
+  const [page, setPage] = useState(1);
+
   const [moviesList, setMoviesList] = useState(
-    moviesCardList
+    []
   );
+
+  const [savedMoviesList, setSavedMoviesList] =
+    useState(savedMoviesCardList);
+
+  const [isMoviesLoad, setIsMoviesLoad] =
+    useState(false);
 
   const location = useLocation().pathname;
   const loggedIn = location !== '/'; // временное решение пока нет авторизации
@@ -34,8 +46,12 @@ function App() {
 
     handleSearchFormSubmit(e, values) {
       e.preventDefault();
-      const searchedMovies =
-        moviesCardList.filter((movie) =>
+      const searchedMovies = moviesCardList
+        .reduce(
+          (res, current) => res.concat(current),
+          []
+        )
+        .filter((movie) =>
           movie.nameRu
             .toLowerCase()
             .includes(values.search.toLowerCase())
@@ -55,11 +71,57 @@ function App() {
         !values.search &&
         !isSearchFocus.search
       ) {
-        setMoviesList(moviesCardList);
+        setMoviesList(moviesCardList[page - 1]);
       }
     },
+
+    handleMovieCardSave(card) {
+      setSavedMoviesList([
+        card,
+        ...savedMoviesList,
+      ]);
+    },
+
+    handleMovieCardDelete(card) {
+      setSavedMoviesList([
+        ...savedMoviesList.filter(
+          (movie) =>
+            movie.movieId !== card.movieId
+        ),
+      ]);
+    },
+
+    handleMoreBtnClick() {
+      setPage(page + 1);
+    },
   };
-  console.log(moviesList);
+
+  useEffect(() => {
+    setIsMoviesLoad(true);
+    // имитация загрузки данных
+    setTimeout(() => {
+      setMoviesList([
+        ...moviesList,
+        ...checkMoviesList(
+          moviesCardList[page - 1],
+          savedMoviesList
+        ),
+      ]);
+      setIsMoviesLoad(false);
+    }, 800);
+  }, [page]);
+
+  useEffect(() => {
+    if (moviesList.length > 0) {
+      setMoviesList([
+        ...checkMoviesList(
+          moviesList,
+          savedMoviesList
+        ),
+      ]);
+    }
+  }, [savedMoviesList]);
+
   return (
     <div className='app'>
       <div
@@ -81,12 +143,30 @@ function App() {
           path='/movies'
           element={
             <Movies
+              moviesList={moviesList}
               onSearchFormSubmit={
                 callbacks.handleSearchFormSubmit
               }
               onResetSearchResult={
                 callbacks.hadleResetSearch
               }
+              onCardAction={(card) =>
+                card.isSaved
+                  ? callbacks.handleMovieCardDelete(
+                      card
+                    )
+                  : callbacks.handleMovieCardSave(
+                      card
+                    )
+              }
+              hasMore={
+                page < moviesCardList.length
+              }
+              onMoreBtnClick={
+                callbacks.handleMoreBtnClick
+              }
+              isLoad={isMoviesLoad}
+              page={page}
             />
           }
         />
