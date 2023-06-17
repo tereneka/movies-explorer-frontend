@@ -62,6 +62,10 @@
 
 .movies-card__btn_type_delete {
   background: inherit;
+  background-image: url(../../images/icon__close.svg);
+  background-size: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 @media screen and (max-width: 900px) {
@@ -82,12 +86,4 @@
   .movies-card {
     width: 100%;
   }
-
-  /* .movies-card__img {
-    height: 190px;
-  }
-
-  .movies-card__footer {
-    height: 60px;
-  } */
 }

@@ -35,18 +35,43 @@ function App() {
   const [isMoviesLoad, setIsMoviesLoad] =
     useState(false);
 
+  const [isMoreBtn, setIsMoreBtn] = useState(
+    page < moviesCardList.length
+  );
+
+  const [user, setUser] = useState({
+    name: 'Екатерина',
+    email: 'teren-eka@yandex.ru',
+  });
+
   const location = useLocation().pathname;
   const loggedIn = location !== '/'; // временное решение пока нет авторизации
   const isDarkTheme = location === '/';
+
+  const isFooter =
+    location === '/' ||
+    location === '/movies' ||
+    location === '/saved-movies';
+
+  const isHeader =
+    location === '/' ||
+    location === '/movies' ||
+    location === '/saved-movies' ||
+    location === '/profile';
 
   const callbacks = {
     toggleNavModal() {
       setIsNavModalOpen(!isNavModalOpen);
     },
 
-    handleSearchFormSubmit(e, values) {
+    handleSearchFormSubmit(
+      e,
+      values,
+      list,
+      callback
+    ) {
       e.preventDefault();
-      const searchedMovies = moviesCardList
+      const searchedMovies = list
         .reduce(
           (res, current) => res.concat(current),
           []
@@ -62,16 +87,24 @@ function App() {
         : searchedMovies.filter(
             (movie) => movie.duration > 30
           );
-
-      setMoviesList(result);
+      setIsMoreBtn(false);
+      callback(result);
     },
 
-    hadleResetSearch(values, isSearchFocus) {
+    hadleResetSearch(
+      values,
+      isSearchFocus,
+      list,
+      callback
+    ) {
       if (
         !values.search &&
         !isSearchFocus.search
       ) {
-        setMoviesList(moviesCardList[page - 1]);
+        setIsMoreBtn(
+          page < moviesCardList.length
+        );
+        callback(list);
       }
     },
 
@@ -93,6 +126,21 @@ function App() {
 
     handleMoreBtnClick() {
       setPage(page + 1);
+    },
+
+    handleEditProfile(e, values) {
+      e.preventDefault();
+      setUser(values);
+    },
+
+    handleRegister(e, values) {
+      e.preventDefault();
+      console.log(values);
+    },
+
+    handleLogin(e, values) {
+      e.preventDefault();
+      console.log(values);
     },
   };
 
@@ -131,12 +179,18 @@ function App() {
             : ''
         }`}
       />
-      <Header
-        loggedIn={loggedIn}
-        isDarkTheme={isDarkTheme}
-        isNavModalOpen={isNavModalOpen}
-        toggleNavModal={callbacks.toggleNavModal}
-      />
+
+      {isHeader && (
+        <Header
+          loggedIn={loggedIn}
+          isDarkTheme={isDarkTheme}
+          isNavModalOpen={isNavModalOpen}
+          toggleNavModal={
+            callbacks.toggleNavModal
+          }
+        />
+      )}
+
       <Routes>
         <Route path='/' element={<Main />} />
         <Route
@@ -144,11 +198,24 @@ function App() {
           element={
             <Movies
               moviesList={moviesList}
-              onSearchFormSubmit={
-                callbacks.handleSearchFormSubmit
+              onSearchFormSubmit={(e, values) =>
+                callbacks.handleSearchFormSubmit(
+                  e,
+                  values,
+                  moviesCardList,
+                  setMoviesList
+                )
               }
-              onResetSearchResult={
-                callbacks.hadleResetSearch
+              onResetSearchResult={(
+                values,
+                isSearchFocus
+              ) =>
+                callbacks.hadleResetSearch(
+                  values,
+                  isSearchFocus,
+                  moviesCardList[0],
+                  setMoviesList
+                )
               }
               onCardAction={(card) =>
                 card.isSaved
@@ -159,9 +226,7 @@ function App() {
                       card
                     )
               }
-              hasMore={
-                page < moviesCardList.length
-              }
+              hasMore={isMoreBtn}
               onMoreBtnClick={
                 callbacks.handleMoreBtnClick
               }
@@ -172,23 +237,68 @@ function App() {
         />
         <Route
           path='/saved-movies'
-          element={<SavedMovies />}
+          element={
+            <SavedMovies
+              moviesList={savedMoviesList}
+              onSearchFormSubmit={(e, values) =>
+                callbacks.handleSearchFormSubmit(
+                  e,
+                  values,
+                  savedMoviesCardList,
+                  setSavedMoviesList
+                )
+              }
+              onResetSearchResult={(
+                values,
+                isSearchFocus
+              ) =>
+                callbacks.hadleResetSearch(
+                  values,
+                  isSearchFocus,
+                  savedMoviesCardList,
+                  setSavedMoviesList
+                )
+              }
+              onCardAction={
+                callbacks.handleMovieCardDelete
+              }
+              isLoad={isMoviesLoad}
+              page={page}
+            />
+          }
         />
         <Route
           path='/profile'
-          element={<Profile />}
+          element={
+            <Profile
+              user={user}
+              onSubmit={
+                callbacks.handleEditProfile
+              }
+            />
+          }
         />
         <Route
           path='/signup'
-          element={<Register />}
+          element={
+            <Register
+              handleRegister={
+                callbacks.handleRegister
+              }
+            />
+          }
         />
         <Route
           path='/signin'
-          element={<Login />}
+          element={
+            <Login
+              handleLogin={callbacks.handleLogin}
+            />
+          }
         />
       </Routes>
 
-      <Footer />
+      {isFooter && <Footer />}
     </div>
   );
 }

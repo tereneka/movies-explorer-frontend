@@ -23,7 +23,8 @@ export function useForm(fields) {
       if (value !== undefined) {
         res[field.name] = value;
       } else {
-        res[field.name] = field.defaultValue;
+        res[field.name] =
+          field.defaultValue || '';
       }
     });
 
