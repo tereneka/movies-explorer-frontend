@@ -22,7 +22,6 @@
 }
 
 .auth-layout__btn-group {
-  /* padding: 70px 0; */
   padding-bottom: 70px;
   display: flex;
   flex-direction: column;
@@ -88,7 +87,6 @@
   }
 
   .auth-layout__btn-group {
-    /* padding: 157px 0 30px; */
     padding-bottom: 30px;
   }
 

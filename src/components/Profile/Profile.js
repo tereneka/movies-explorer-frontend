@@ -29,34 +29,36 @@ function Profile({ user, onSubmit }) {
           name='profile'
           onSubmit={(e) => onSubmit(e, values)}
           noValidate>
-          <label className='profile__input-label'>
-            Имя
-            <input
-              className='profile__input'
-              name='name'
-              value={values.name}
-              onChange={handleChange}
-              required
-              minLength={2}
-            />
-          </label>
-          <span className='profile__input-err'>
-            {errMessages.name}
-          </span>
-          <label className='profile__input-label'>
-            E-mail
-            <input
-              className='profile__input'
-              name='email'
-              value={values.email}
-              onChange={handleChange}
-              required
-              type='email'
-            />
-          </label>
-          <span className='profile__input-err'>
-            {errMessages.email}
-          </span>
+          <div>
+            <label className='profile__input-label'>
+              Имя
+              <input
+                className='profile__input'
+                name='name'
+                value={values.name}
+                onChange={handleChange}
+                required
+                minLength={2}
+              />
+            </label>
+            <span className='profile__input-err'>
+              {errMessages.name}
+            </span>
+            <label className='profile__input-label'>
+              E-mail
+              <input
+                className='profile__input'
+                name='email'
+                value={values.email}
+                onChange={handleChange}
+                required
+                type='email'
+              />
+            </label>
+            <span className='profile__input-err'>
+              {errMessages.email}
+            </span>
+          </div>
 
           <div className='profile__btn-group'>
             <button

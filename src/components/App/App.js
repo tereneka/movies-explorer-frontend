@@ -180,123 +180,127 @@ function App() {
         }`}
       />
 
-      {isHeader && (
-        <Header
-          loggedIn={loggedIn}
-          isDarkTheme={isDarkTheme}
-          isNavModalOpen={isNavModalOpen}
-          toggleNavModal={
-            callbacks.toggleNavModal
-          }
-        />
-      )}
+      <div>
+        {isHeader && (
+          <Header
+            loggedIn={loggedIn}
+            isDarkTheme={isDarkTheme}
+            isNavModalOpen={isNavModalOpen}
+            toggleNavModal={
+              callbacks.toggleNavModal
+            }
+          />
+        )}
 
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route
-          path='/movies'
-          element={
-            <Movies
-              moviesList={moviesList}
-              onSearchFormSubmit={(e, values) =>
-                callbacks.handleSearchFormSubmit(
-                  e,
+        <Routes>
+          <Route path='/' element={<Main />} />
+          <Route
+            path='/movies'
+            element={
+              <Movies
+                moviesList={moviesList}
+                onSearchFormSubmit={(e, values) =>
+                  callbacks.handleSearchFormSubmit(
+                    e,
+                    values,
+                    moviesCardList,
+                    setMoviesList
+                  )
+                }
+                onResetSearchResult={(
                   values,
-                  moviesCardList,
-                  setMoviesList
-                )
-              }
-              onResetSearchResult={(
-                values,
-                isSearchFocus
-              ) =>
-                callbacks.hadleResetSearch(
+                  isSearchFocus
+                ) =>
+                  callbacks.hadleResetSearch(
+                    values,
+                    isSearchFocus,
+                    moviesCardList[0],
+                    setMoviesList
+                  )
+                }
+                onCardAction={(card) =>
+                  card.isSaved
+                    ? callbacks.handleMovieCardDelete(
+                        card
+                      )
+                    : callbacks.handleMovieCardSave(
+                        card
+                      )
+                }
+                hasMore={isMoreBtn}
+                onMoreBtnClick={
+                  callbacks.handleMoreBtnClick
+                }
+                isLoad={isMoviesLoad}
+                page={page}
+              />
+            }
+          />
+          <Route
+            path='/saved-movies'
+            element={
+              <SavedMovies
+                moviesList={savedMoviesList}
+                onSearchFormSubmit={(e, values) =>
+                  callbacks.handleSearchFormSubmit(
+                    e,
+                    values,
+                    savedMoviesCardList,
+                    setSavedMoviesList
+                  )
+                }
+                onResetSearchResult={(
                   values,
-                  isSearchFocus,
-                  moviesCardList[0],
-                  setMoviesList
-                )
-              }
-              onCardAction={(card) =>
-                card.isSaved
-                  ? callbacks.handleMovieCardDelete(
-                      card
-                    )
-                  : callbacks.handleMovieCardSave(
-                      card
-                    )
-              }
-              hasMore={isMoreBtn}
-              onMoreBtnClick={
-                callbacks.handleMoreBtnClick
-              }
-              isLoad={isMoviesLoad}
-              page={page}
-            />
-          }
-        />
-        <Route
-          path='/saved-movies'
-          element={
-            <SavedMovies
-              moviesList={savedMoviesList}
-              onSearchFormSubmit={(e, values) =>
-                callbacks.handleSearchFormSubmit(
-                  e,
-                  values,
-                  savedMoviesCardList,
-                  setSavedMoviesList
-                )
-              }
-              onResetSearchResult={(
-                values,
-                isSearchFocus
-              ) =>
-                callbacks.hadleResetSearch(
-                  values,
-                  isSearchFocus,
-                  savedMoviesCardList,
-                  setSavedMoviesList
-                )
-              }
-              onCardAction={
-                callbacks.handleMovieCardDelete
-              }
-              isLoad={isMoviesLoad}
-              page={page}
-            />
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            <Profile
-              user={user}
-              onSubmit={
-                callbacks.handleEditProfile
-              }
-            />
-          }
-        />
-        <Route
-          path='/signup'
-          element={
-            <Register
-              handleRegister={
-                callbacks.handleRegister
-              }
-            />
-          }
-        />
-        <Route
-          path='/signin'
-          element={
-            <Login
-              handleLogin={callbacks.handleLogin}
-            />
-          }
-        />
-      </Routes>
+                  isSearchFocus
+                ) =>
+                  callbacks.hadleResetSearch(
+                    values,
+                    isSearchFocus,
+                    savedMoviesCardList,
+                    setSavedMoviesList
+                  )
+                }
+                onCardAction={
+                  callbacks.handleMovieCardDelete
+                }
+                isLoad={isMoviesLoad}
+                page={page}
+              />
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              <Profile
+                user={user}
+                onSubmit={
+                  callbacks.handleEditProfile
+                }
+              />
+            }
+          />
+          <Route
+            path='/signup'
+            element={
+              <Register
+                handleRegister={
+                  callbacks.handleRegister
+                }
+              />
+            }
+          />
+          <Route
+            path='/signin'
+            element={
+              <Login
+                handleLogin={
+                  callbacks.handleLogin
+                }
+              />
+            }
+          />
+        </Routes>
+      </div>
 
       {isFooter && <Footer />}
     </div>
