@@ -86,12 +86,12 @@
 
 @media screen and (max-width: 900px) {
   .profile {
-    padding: 236px 0 270px;
+    padding: 23vh 0 26vh;
   }
 
   .profile__form {
     padding-top: 96px;
-    min-height: calc(100vh - 580px);
+    min-height: calc(100vh - 103px - 49vh);
   }
 }
 

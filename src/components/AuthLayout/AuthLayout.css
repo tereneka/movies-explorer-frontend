@@ -63,19 +63,21 @@
   }
 
   .auth-layout__header {
-    padding-top: 232px;
+    padding-top: 23vh;
   }
 
   .auth-layout__form {
-    min-height: calc(100vh - 615px);
+    min-height: calc(100vh - 383px - 23vh);
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .auth-layout {
+    width: calc(100% - 60px);
   }
 }
 
 @media screen and (max-width: 420px) {
-  .auth-layout {
-    width: calc(100% - 60px);
-  }
-
   .auth-layout__header {
     padding: 56px 0 80px;
     display: flex;
