@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 74px;
+  padding: 0 var(--side-padding-l);
+}
+
+.header_theme_dark {
+  background: var(--dark-color);
+  color: var(--light-color);
+}
+
+.header_theme_light {
+  background: var(--light-color);
+  color: var(--dark-color);
+}
+
+@media screen and (max-width: 900px) {
+  .header {
+    padding: 0 30px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .header {
+    padding: 0 14px;
+  }
+}

@@ -1,0 +1,127 @@
+.about-project {
+  padding: 110px var(--side-padding-l);
+}
+
+.about-project__description {
+  list-style: none;
+  margin: 70px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 40px;
+}
+
+.about-project__description-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+}
+
+.about-project__description-paragraph {
+  font-size: 14px;
+  line-height: 143%;
+  margin: 26px 0 0;
+}
+
+.about-project__steps {
+  list-style: none;
+  margin: 110px 0 0;
+  padding: 0;
+  display: flex;
+}
+
+.about-project__steps-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  padding: 9px 0;
+}
+
+.about-project__steps-paragraph {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 121%;
+  text-align: center;
+  color: var(--muted-text-color);
+  margin: 14px 0 0;
+}
+
+.about-project__steps-item {
+  flex: 1;
+}
+
+.about-project__steps-item:last-of-type {
+  flex: 4;
+}
+
+.about-project__steps-item:nth-child(odd)
+  .about-project__steps-title {
+  background: var(--success-color);
+}
+
+.about-project__steps-item:nth-child(even)
+  .about-project__steps-title {
+  background: #f2f2f2;
+}
+
+@media screen and (max-width: 900px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+
+  .about-project__description-paragraph {
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 22px;
+  }
+
+  .about-project__steps {
+    margin-top: 93px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .about-project {
+    padding: 70px 18px;
+  }
+
+  .about-project__description {
+    flex-direction: column;
+    gap: 56px;
+    margin-top: 60px;
+  }
+
+  .about-project__description-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .about-project__steps {
+    margin-top: 60px;
+  }
+
+  .about-project__description-paragraph {
+    font-size: 11px;
+    line-height: 16px;
+    margin-top: 16px;
+  }
+
+  .about-project__steps-item:last-of-type {
+    flex: 1.84;
+  }
+
+  .about-project__steps-title {
+    font-size: 11px;
+    line-height: 13px;
+    padding: 11px 0;
+  }
+
+  .about-project__steps-paragraph {
+    font-size: 11px;
+    line-height: 13px;
+    margin-top: 10px;
+  }
+}

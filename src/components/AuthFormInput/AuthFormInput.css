@@ -1,0 +1,32 @@
+.auth-form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--muted-text-color);
+}
+
+.auth-form-input__input {
+  border: none;
+  background: var(--input-background);
+  font-weight: 500;
+  font-size: 13px;
+  padding: 15px;
+  border-radius: var(--border-radius-m);
+}
+
+.auth-form-input__input:focus-visible {
+  outline: none;
+}
+
+.auth-form-input__input_type_err {
+  color: var(--error-color);
+}
+
+.auth-form-input__err {
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--error-color);
+  min-height: 12px;
+}

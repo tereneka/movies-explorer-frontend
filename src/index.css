@@ -1,0 +1,26 @@
+@import url(./vendor/fonts/inter.css);
+@import url(./vendor/normalize.css);
+
+body {
+  margin: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --dark-color: #073042;
+  --light-color: #ffffff;
+  --primary-color: #3456f3;
+  --success-color: #2be080;
+  --error-color: #ff3055;
+  --muted-text-color: #a0a0a0;
+  --input-background: #f9f9f9;
+  --side-padding-l: 70px;
+  --border-radius-xs: 3px;
+  --border-radius-s: 5px;
+  --border-radius-m: 10px;
+  --border-radius-l: 16px;
+  --border-radius-xl: 30px;
+  --hover-opacity: 0.8;
+}
