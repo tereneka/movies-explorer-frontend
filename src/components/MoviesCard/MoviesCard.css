@@ -47,6 +47,10 @@
   cursor: pointer;
 }
 
+.movies-card__btn:hover {
+  opacity: var(--hover-opacity);
+}
+
 .movies-card__btn_type_check {
   background: var(--error-color);
   border-radius: var(--border-radius-xl);

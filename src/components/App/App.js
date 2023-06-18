@@ -18,6 +18,7 @@ import {
   savedMoviesCardList,
 } from '../../constants';
 import { checkMoviesList } from '../../utils/utils';
+import ErrorPage from '../ErrorPage/ErrorPage';
 
 function App() {
   const [isNavModalOpen, setIsNavModalOpen] =
@@ -60,8 +61,8 @@ function App() {
     location === '/profile';
 
   const callbacks = {
-    toggleNavModal() {
-      setIsNavModalOpen(!isNavModalOpen);
+    toggleNavModal(bool) {
+      setIsNavModalOpen(bool);
     },
 
     handleSearchFormSubmit(
@@ -298,6 +299,10 @@ function App() {
                 }
               />
             }
+          />
+          <Route
+            path='*'
+            element={<ErrorPage />}
           />
         </Routes>
       </div>

@@ -80,6 +80,10 @@
   text-decoration: none;
 }
 
+.profile__btn:hover {
+  opacity: var(--hover-opacity);
+}
+
 @media screen and (max-width: 900px) {
   .profile {
     padding: 236px 0 270px;

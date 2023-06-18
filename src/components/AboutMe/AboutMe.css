@@ -46,6 +46,10 @@
   text-decoration: none;
 }
 
+.about-me__gh-link:hover {
+  opacity: var(--hover-opacity);
+}
+
 .about-me__photo {
   width: 270px;
   height: 327px;

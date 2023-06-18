@@ -64,6 +64,10 @@
   margin-left: 13px;
 }
 
+.navigation__account-link:hover:after {
+  opacity: var(--hover-opacity);
+}
+
 .navigation__account-link_theme_dark::after {
   background-image: url(../../images/icon__man-white.svg);
 }
@@ -101,6 +105,10 @@
   padding: 0;
   display: none;
   cursor: pointer;
+}
+
+.navigation__link:hover {
+  opacity: var(--hover-opacity);
 }
 
 @media screen and (max-width: 900px) {

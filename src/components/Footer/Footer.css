@@ -40,6 +40,10 @@
   text-decoration: none;
 }
 
+.footer__link:hover {
+  opacity: var(--hover-opacity);
+}
+
 @media screen and (max-width: 900px) {
   .footer {
     padding: 80px 30px 20px;

@@ -43,6 +43,10 @@
   display: inline-block;
 }
 
+.portfolio__link:hover {
+  opacity: var(--hover-opacity);
+}
+
 @media screen and (max-width: 900px) {
   .portfolio {
     padding: 90px 50px;

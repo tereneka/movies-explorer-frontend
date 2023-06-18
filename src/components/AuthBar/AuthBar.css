@@ -14,6 +14,10 @@
   color: inherit;
 }
 
+.auth-bar__link:hover {
+  opacity: var(--hover-opacity);
+}
+
 .auth-bar__link_type_btn {
   background: var(--success-color);
   color: var(--dark-color);

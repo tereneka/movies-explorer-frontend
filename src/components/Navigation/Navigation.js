@@ -15,7 +15,7 @@ function Navigation({
             ? 'navigation__burger-btn_invisible'
             : ''
         }`}
-        onClick={toggleNavModal}
+        onClick={() => toggleNavModal(true)}
       />
       <div
         className={`navigation-container ${
@@ -25,7 +25,7 @@ function Navigation({
         }`}>
         <button
           className='navigation__close-btn'
-          onClick={toggleNavModal}
+          onClick={() => toggleNavModal(false)}
         />
         <nav>
           <ul className='navigation__list'>
@@ -38,7 +38,10 @@ function Navigation({
                       : ''
                   }`
                 }
-                to='/'>
+                to='/'
+                onClick={() =>
+                  toggleNavModal(false)
+                }>
                 Главная
               </NavLink>
             </li>
@@ -51,7 +54,10 @@ function Navigation({
                       : ''
                   }`
                 }
-                to='/movies'>
+                to='/movies'
+                onClick={() =>
+                  toggleNavModal(false)
+                }>
                 Фильмы
               </NavLink>
             </li>
@@ -64,7 +70,10 @@ function Navigation({
                       : ''
                   }`
                 }
-                to='/saved-movies'>
+                to='/saved-movies'
+                onClick={() =>
+                  toggleNavModal(false)
+                }>
                 Сохранённые фильмы
               </NavLink>
             </li>
@@ -76,7 +85,8 @@ function Navigation({
               ? 'navigation__account-link_theme_dark'
               : ''
           }`}
-          to='/profile'>
+          to='/profile'
+          onClick={() => toggleNavModal(false)}>
           Аккаунт
         </Link>
       </div>

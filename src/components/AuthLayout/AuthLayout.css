@@ -52,6 +52,11 @@
   color: var(--primary-color);
 }
 
+.auth-layout__btn:hover,
+.auth-layout__link:hover {
+  opacity: var(--hover-opacity);
+}
+
 @media screen and (max-width: 900px) {
   .auth-layout {
     width: 500px;

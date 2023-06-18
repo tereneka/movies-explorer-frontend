@@ -42,6 +42,10 @@
   cursor: pointer;
 }
 
+.search-form__serch-btn:hover {
+  opacity: var(--hover-opacity);
+}
+
 .search-form__switch-label {
   font-size: 13px;
   cursor: pointer;
