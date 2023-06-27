@@ -4,25 +4,39 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
+import Message from '../Message/Message';
 
 function Movies({
   moviesList,
-  onSearchFormSubmit,
+  onSearchMovies,
+  onToggleMovies,
   onResetSearchResult,
   onCardAction,
-  hasMore,
+  hasMoreBtn,
   onMoreBtnClick,
   isLoad,
   page,
+  message,
 }) {
+  const searchFormValues = JSON.parse(
+    sessionStorage.getItem('search')
+  ) || {
+    keywords: '',
+    switch: true,
+  };
+
   return (
     <main>
       <SearchForm
-        onSubmit={onSearchFormSubmit}
+        defaultValues={searchFormValues}
+        onSubmit={onSearchMovies}
+        onToggleSwitch={onToggleMovies}
         onResetResult={onResetSearchResult}
       />
-      {isLoad && page < 2 ? (
+      {isLoad ? (
         <Preloader />
+      ) : message.text ? (
+        <Message message={message} />
       ) : (
         <>
           <MoviesCardList
@@ -32,10 +46,9 @@ function Movies({
             }
             onCardAction={onCardAction}
           />{' '}
-          {hasMore && !isLoad && (
+          {hasMoreBtn && (
             <More onClick={onMoreBtnClick} />
           )}
-          {isLoad && page > 1 && <Preloader />}
         </>
       )}
     </main>

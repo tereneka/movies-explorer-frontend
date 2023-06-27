@@ -1,8 +1,16 @@
-import React, { useEffect } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import './SearchForm.css';
 import { useForm } from '../../hooks/useForm';
 
-function SearchForm({ onSubmit, onResetResult }) {
+function SearchForm({
+  defaultValues,
+  onSubmit,
+  onToggleSwitch,
+  onResetResult,
+}) {
   const {
     values,
     isFocus,
@@ -10,15 +18,20 @@ function SearchForm({ onSubmit, onResetResult }) {
     handleFocus,
     handleBlur,
   } = useForm([
-    { name: 'search', defaultValue: '' },
-    { name: 'switch', defaultValue: true },
-    ,
+    {
+      name: 'keywords',
+      defaultValue: defaultValues.keywords,
+    },
+    {
+      name: 'switch',
+      defaultValue: defaultValues.switch,
+    },
   ]);
-
-  useEffect(
-    () => onResetResult(values, isFocus),
-    [values, isFocus]
-  );
+  // console.log(values);
+  // useEffect(
+  //   () => onResetResult(values, isFocus),
+  //   [values, isFocus]
+  // );
 
   return (
     <form
@@ -34,9 +47,9 @@ function SearchForm({ onSubmit, onResetResult }) {
         <input
           className='search-form__serch-input'
           type='text'
-          name='search'
+          name='keywords'
           placeholder='Фильм'
-          value={values.search}
+          value={values.keywords}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -59,7 +72,10 @@ function SearchForm({ onSubmit, onResetResult }) {
           className='search-form__switch'
           type='checkbox'
           name='switch'
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            onToggleSwitch(e.target.checked);
+          }}
           checked={values.switch}
         />
         Короткометражки

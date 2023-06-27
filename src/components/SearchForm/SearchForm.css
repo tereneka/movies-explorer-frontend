@@ -46,6 +46,10 @@
   opacity: var(--hover-opacity);
 }
 
+.search-form__serch-btn:focus-visible {
+  outline: none;
+}
+
 .search-form__switch-label {
   font-size: 13px;
   cursor: pointer;

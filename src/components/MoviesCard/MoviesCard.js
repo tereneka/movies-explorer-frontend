@@ -6,7 +6,7 @@ function MoviesCard({ card, btnType, onAction }) {
     <li className='movies-card'>
       <div className='movies-card__header'>
         <h3 className='movies-card__name'>
-          {card.nameRu}
+          {card.nameRU}
         </h3>
         <p className='movies-card__duration'>
           {card.duration} минут
@@ -14,8 +14,8 @@ function MoviesCard({ card, btnType, onAction }) {
       </div>
       <img
         className='movies-card__img'
-        src={card.image}
-        alt={card.nameRu}
+        src={`https://api.nomoreparties.co/${card.image.url}`}
+        alt={card.nameRU}
       />
       <div className='movies-card__footer'>
         <button

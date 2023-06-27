@@ -14,21 +14,41 @@ import Header from '../Header/Header';
 import { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
 import {
+  messages,
   moviesCardList,
   savedMoviesCardList,
 } from '../../constants';
-import { checkMoviesList } from '../../utils/utils';
+import {
+  calculateCardsPerPage,
+  checkMoviesList,
+  searchMovies,
+  toggleMovies,
+} from '../../utils/utils';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import { moviesApi } from '../../utils/moviesApi';
 
 function App() {
   const [isNavModalOpen, setIsNavModalOpen] =
     useState(false);
 
-  const [page, setPage] = useState(1);
-
-  const [moviesList, setMoviesList] = useState(
+  const moviesStorageData = JSON.parse(
+    sessionStorage.getItem('search')
+  );
+  const [moviesData, setMoviesData] = useState(
     []
   );
+  const [
+    seachedMoviesList,
+    setSeachedMoviesList,
+  ] = useState([]);
+  const [
+    toggledMoviesList,
+    setToggledMoviesList,
+  ] = useState([]);
+  const [
+    renderedMoviesList,
+    setRenderedMoviesList,
+  ] = useState([]);
 
   const [savedMoviesList, setSavedMoviesList] =
     useState(savedMoviesCardList);
@@ -36,9 +56,25 @@ function App() {
   const [isMoviesLoad, setIsMoviesLoad] =
     useState(false);
 
-  const [isMoreBtn, setIsMoreBtn] = useState(
-    page < moviesCardList.length
-  );
+  const [message, setMessage] = useState({
+    text: '',
+    isError: false,
+  });
+
+  const [
+    moviesCardsPerPage,
+    setMoviesCardsPerPage,
+  ] = useState({
+    initial: 0,
+    additional: 0,
+  });
+
+  const [
+    moviesCardsPageNumber,
+    setMoviesCardsPageNumber,
+  ] = useState(0);
+
+  const [moviesPage, setMoviesPage] = useState(1);
 
   const [user, setUser] = useState({
     name: 'Екатерина',
@@ -65,31 +101,110 @@ function App() {
       setIsNavModalOpen(bool);
     },
 
-    handleSearchFormSubmit(
-      e,
-      values,
-      list,
-      callback
-    ) {
-      e.preventDefault();
-      const searchedMovies = list
-        .reduce(
-          (res, current) => res.concat(current),
-          []
-        )
-        .filter((movie) =>
-          movie.nameRu
-            .toLowerCase()
-            .includes(values.search.toLowerCase())
-        );
+    handleSearchMovies(e, values) {
+      e?.preventDefault();
+      let moviesList;
 
-      const result = values.switch
-        ? searchedMovies
-        : searchedMovies.filter(
-            (movie) => movie.duration > 30
+      function setData() {
+        setMessage({ text: '', isError: false });
+        const filteredMovies = toggleMovies(
+          moviesList,
+          values.switch
+        );
+        setSeachedMoviesList(moviesList);
+        setToggledMoviesList(filteredMovies);
+        if (filteredMovies.length < 1) {
+          setMessage({
+            text: messages.notFound,
+            isError: false,
+          });
+
+          sessionStorage.setItem(
+            'search',
+            JSON.stringify({
+              ...values,
+              moviesList,
+              message: {
+                text: messages.notFound,
+                isError: false,
+              },
+            })
           );
-      setIsMoreBtn(false);
-      callback(result);
+        } else {
+          sessionStorage.setItem(
+            'search',
+            JSON.stringify({
+              ...values,
+              moviesList,
+              message: {
+                text: '',
+                isError: false,
+              },
+            })
+          );
+        }
+      }
+
+      if (moviesData.length < 1) {
+        setIsMoviesLoad(true);
+        moviesApi
+          .getMovies()
+          .then((data) => {
+            moviesList = searchMovies(
+              data,
+              values.keywords
+            );
+            setMoviesData(data);
+            setData();
+          })
+          .catch(() => {
+            setMessage({
+              text: messages.serverError,
+              isError: true,
+            });
+
+            sessionStorage.setItem(
+              'search',
+              JSON.stringify({
+                ...values,
+                moviesList: [],
+                message: {
+                  text: messages.serverError,
+                  isError: true,
+                },
+              })
+            );
+          })
+          .finally(() => setIsMoviesLoad(false));
+      } else {
+        moviesList = searchMovies(
+          moviesData,
+          values.keywords
+        );
+        setData();
+      }
+
+      setMoviesPage(1);
+    },
+
+    handleToggleMovies(switchValue) {
+      setToggledMoviesList(
+        toggleMovies(
+          seachedMoviesList,
+          switchValue
+        )
+      );
+
+      if (moviesStorageData) {
+        sessionStorage.setItem(
+          'search',
+          JSON.stringify({
+            keywords: moviesStorageData.keywords,
+            switch: switchValue,
+            moviesList: toggledMoviesList,
+          })
+        );
+      }
     },
 
     hadleResetSearch(
@@ -98,15 +213,15 @@ function App() {
       list,
       callback
     ) {
-      if (
-        !values.search &&
-        !isSearchFocus.search
-      ) {
-        setIsMoreBtn(
-          page < moviesCardList.length
-        );
-        callback(list);
-      }
+      // if (
+      //   !values.search &&
+      //   !isSearchFocus.search
+      // ) {
+      //   setIsMoreBtn(
+      //     page < moviesCardList.length
+      //   );
+      //   callback(list);
+      // }
     },
 
     handleMovieCardSave(card) {
@@ -126,7 +241,7 @@ function App() {
     },
 
     handleMoreBtnClick() {
-      setPage(page + 1);
+      setMoviesPage(moviesPage + 1);
     },
 
     handleEditProfile(e, values) {
@@ -146,30 +261,92 @@ function App() {
   };
 
   useEffect(() => {
-    setIsMoviesLoad(true);
-    // имитация загрузки данных
-    setTimeout(() => {
-      setMoviesList([
-        ...moviesList,
-        ...checkMoviesList(
-          moviesCardList[page - 1],
-          savedMoviesList
-        ),
-      ]);
-      setIsMoviesLoad(false);
-    }, 800);
-  }, [page]);
+    if (moviesStorageData) {
+      setToggledMoviesList(
+        moviesStorageData.moviesList
+      );
+
+      if (moviesStorageData.message.isError) {
+        callbacks.handleSearchMovies(null, {
+          keywords: moviesStorageData.keywords,
+          switch: moviesStorageData.switch,
+        });
+      }
+      setMessage(moviesStorageData.message);
+    } else {
+      setMessage({
+        text: messages.initSearch,
+        isError: false,
+      });
+    }
+
+    setMoviesCardsPerPage(
+      calculateCardsPerPage()
+    );
+  }, []);
 
   useEffect(() => {
-    if (moviesList.length > 0) {
-      setMoviesList([
-        ...checkMoviesList(
-          moviesList,
-          savedMoviesList
-        ),
-      ]);
-    }
-  }, [savedMoviesList]);
+    const num =
+      toggledMoviesList.length >
+      moviesCardsPerPage.initial
+        ? Math.ceil(
+            (toggledMoviesList.length -
+              moviesCardsPerPage.initial) /
+              moviesCardsPerPage.additional +
+              1
+          )
+        : 1;
+    setMoviesCardsPageNumber(num);
+  }, [toggledMoviesList, moviesCardsPerPage]);
+
+  useEffect(() => {
+    const end =
+      moviesCardsPerPage.initial +
+      moviesCardsPerPage.additional *
+        (moviesPage - 1);
+
+    setRenderedMoviesList(
+      toggledMoviesList.slice(0, end)
+    );
+  }, [
+    moviesCardsPerPage,
+    toggledMoviesList,
+    moviesPage,
+  ]);
+
+  window.addEventListener('resize', () =>
+    setTimeout(() => {
+      setMoviesCardsPerPage(
+        calculateCardsPerPage()
+      );
+    }, 2000)
+  );
+
+  // useEffect(() => {
+  //   setIsMoviesLoad(true);
+  //   // имитация загрузки данных
+  //   setTimeout(() => {
+  //     setToggledMoviesList([
+  //       ...moviesList,
+  //       ...checkMoviesList(
+  //         moviesCardList[page - 1],
+  //         savedMoviesList
+  //       ),
+  //     ]);
+  //     setIsMoviesLoad(false);
+  //   }, 800);
+  // }, [page]);
+
+  // useEffect(() => {
+  //   if (moviesList.length > 0) {
+  //     setToggledMoviesList([
+  //       ...checkMoviesList(
+  //         moviesList,
+  //         savedMoviesList
+  //       ),
+  //     ]);
+  //   }
+  // }, [savedMoviesList]);
 
   return (
     <div className='app'>
@@ -199,14 +376,12 @@ function App() {
             path='/movies'
             element={
               <Movies
-                moviesList={moviesList}
-                onSearchFormSubmit={(e, values) =>
-                  callbacks.handleSearchFormSubmit(
-                    e,
-                    values,
-                    moviesCardList,
-                    setMoviesList
-                  )
+                moviesList={renderedMoviesList}
+                onSearchMovies={
+                  callbacks.handleSearchMovies
+                }
+                onToggleMovies={
+                  callbacks.handleToggleMovies
                 }
                 onResetSearchResult={(
                   values,
@@ -216,7 +391,7 @@ function App() {
                     values,
                     isSearchFocus,
                     moviesCardList[0],
-                    setMoviesList
+                    setToggledMoviesList
                   )
                 }
                 onCardAction={(card) =>
@@ -228,12 +403,16 @@ function App() {
                         card
                       )
                 }
-                hasMore={isMoreBtn}
+                hasMoreBtn={
+                  moviesPage <
+                  moviesCardsPageNumber
+                }
                 onMoreBtnClick={
                   callbacks.handleMoreBtnClick
                 }
                 isLoad={isMoviesLoad}
-                page={page}
+                page={moviesPage}
+                message={message}
               />
             }
           />
@@ -246,7 +425,6 @@ function App() {
                   callbacks.handleSearchFormSubmit(
                     e,
                     values,
-                    savedMoviesCardList,
                     setSavedMoviesList
                   )
                 }
@@ -265,7 +443,7 @@ function App() {
                   callbacks.handleMovieCardDelete
                 }
                 isLoad={isMoviesLoad}
-                page={page}
+                page={moviesPage}
               />
             }
           />

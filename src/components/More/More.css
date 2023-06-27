@@ -19,6 +19,10 @@
   opacity: var(--hover-opacity);
 }
 
+.more__btn:focus-visible {
+  outline: none;
+}
+
 @media screen and (max-width: 900px) {
   .more {
     padding: 50px 30px 80px;

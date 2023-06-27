@@ -198,6 +198,13 @@ const moviesCardList = [
   ],
 ];
 
+const messages = {
+  initSearch: 'Введите запрос.',
+  notFound: 'Ничего не найдено.',
+  serverError:
+    'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
+};
+
 const savedMoviesCardList = [
   {
     nameRu: 'В погоне за Бенкси',
@@ -225,6 +232,7 @@ const savedMoviesCardList = [
 export {
   techs,
   portfoloiList,
+  messages,
   moviesCardList,
   savedMoviesCardList,
 };

@@ -14,7 +14,7 @@ function SavedMovies({
 }) {
   return (
     <main>
-      <SearchForm
+      {/* <SearchForm
         onSubmit={onSearchFormSubmit}
         onResetResult={onResetSearchResult}
       />
@@ -26,7 +26,7 @@ function SavedMovies({
           cardBtnType={(card) => 'delete'}
           onCardAction={onCardAction}
         />
-      )}
+      )} */}
     </main>
   );
 }
