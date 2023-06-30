@@ -23,7 +23,7 @@
 .navigation {
 }
 
-.navigation-container {
+.navigation__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,6 +44,7 @@
   font-weight: 400;
   font-size: 14px;
   text-decoration: none;
+  white-space: nowrap;
   color: inherit;
 }
 
@@ -84,7 +85,7 @@
   width: 22px;
   height: 22px;
   background-color: inherit;
-  background-image: url(../../images/icon__close.svg);
+  background-image: url(../../images/icon__close_black.svg);
   background-size: cover;
   border: none;
   padding: 0;
@@ -95,11 +96,15 @@
   cursor: pointer;
 }
 
+.navigation__close-btn_theme_dark {
+  background-image: url(../../images/icon__close_white.svg);
+}
+
 .navigation__burger-btn {
   width: 44px;
   height: 44px;
   background-color: inherit;
-  background-image: url(../../images/icon__burger.svg);
+  background-image: url(../../images/icon__burger_black.svg);
   background-size: cover;
   border: none;
   padding: 0;
@@ -107,12 +112,16 @@
   cursor: pointer;
 }
 
+.navigation__burger-btn_theme_dark {
+  background-image: url(../../images/icon__burger_white.svg);
+}
+
 .navigation__link:hover {
   opacity: var(--hover-opacity);
 }
 
 @media screen and (max-width: 900px) {
-  .navigation-container {
+  .navigation__container {
     flex-direction: column;
     position: fixed;
     top: 0;
@@ -127,7 +136,11 @@
     animation: moveout 0.4s ease-in-out 1;
   }
 
-  .navigation-container_visible {
+  .navigation__container_theme_dark {
+    background: var(--dark-color);
+  }
+
+  .navigation__container_visible {
     visibility: visible;
     opacity: 1;
     animation: movein 0.4s ease-in-out 1;
@@ -152,6 +165,10 @@
     padding-bottom: 4px;
   }
 
+  .navigation__link_theme_dark {
+    border-bottom-color: var(--light-color);
+  }
+
   .navigation__link_optional {
     display: inline;
   }
@@ -161,13 +178,6 @@
   }
 
   .navigation__burger-btn {
-    width: 44px;
-    height: 44px;
-    background-color: inherit;
-    background-image: url(../../images/icon__burger.svg);
-    background-size: cover;
-    border: none;
-    padding: 0;
     display: block;
   }
 
@@ -177,7 +187,7 @@
 }
 
 @media screen and (max-width: 420px) {
-  .navigation-container {
+  .navigation__container {
     width: 100vw;
   }
 

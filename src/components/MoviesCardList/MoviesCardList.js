@@ -5,6 +5,8 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 function MoviesCardList({
   list,
   cardBtnType,
+  cardBtnText,
+  onCardClick,
   onCardAction,
 }) {
   return (
@@ -13,9 +15,11 @@ function MoviesCardList({
         {list.map((card) => (
           <MoviesCard
             card={card}
-            key={card.movieId}
             btnType={cardBtnType(card)}
+            btnText={cardBtnText(card)}
+            onCardClick={onCardClick}
             onAction={onCardAction}
+            key={card.movieId}
           />
         ))}
       </ul>

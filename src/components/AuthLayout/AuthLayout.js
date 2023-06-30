@@ -7,6 +7,7 @@ function AuthLayout({
   title,
   formName,
   isFormValid,
+  error,
   onSubmit,
   children,
 }) {
@@ -30,9 +31,17 @@ function AuthLayout({
           noValidate>
           <div>{children}</div>
 
+          <p className='auth-layout__err'>
+            {error}
+          </p>
+
           <div className='auth-layout__btn-group'>
             <button
-              className='auth-layout__btn'
+              className={`auth-layout__btn ${
+                !isFormValid
+                  ? 'auth-layout__btn_disabled'
+                  : ''
+              }`}
               type='submit'
               disabled={!isFormValid}>
               {isRegisterForm

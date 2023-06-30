@@ -1,16 +1,3 @@
-// function searchMovies(data, params) {
-//   return data.filter((movie) =>
-//     params.switch
-//       ? (movie.nameRU + movie.nameEN)
-//           .toLowerCase()
-//           .includes(params.search.toLowerCase())
-//       : (movie.nameRU + movie.nameEN)
-//           .toLowerCase()
-//           .includes(
-//             params.search.toLowerCase()
-//           ) && movie.duration > 40
-//   );
-// }
 function searchMovies(data, keywords) {
   return data.filter((movie) =>
     (movie.nameRU + movie.nameEN)
@@ -27,14 +14,30 @@ function toggleMovies(moviesList, isSwitchOn) {
       );
 }
 
+function convertMoviesData(moviesList) {
+  return moviesList.map((movie) => ({
+    country: movie.country,
+    director: movie.director,
+    duration: movie.duration,
+    year: movie.year,
+    description: movie.description,
+    image: this._baseUrl + movie.image.url,
+    trailerLink: movie.trailerLink,
+    thumbnail: this._baseUrl + movie.image.url,
+    movieId: movie.id,
+    nameRU: movie.nameRU,
+    nameEN: movie.nameEN,
+  }));
+}
+
 function checkMoviesList(list, savedList) {
   const result = list;
   result.forEach((movie, index) => {
-    result[index].isSaved = savedList.find(
+    result[index].type = savedList.find(
       (item) => item.movieId === movie.movieId
     )
-      ? true
-      : false;
+      ? 'saved'
+      : 'save';
   });
 
   return result;
@@ -60,9 +63,24 @@ function calculateCardsPerPage() {
   return result;
 }
 
+function calculateCardsPageNumber(
+  list,
+  cardsPerPage
+) {
+  return list.length > cardsPerPage.initial
+    ? Math.ceil(
+        (list.length - cardsPerPage.initial) /
+          cardsPerPage.additional +
+          1
+      )
+    : 1;
+}
+
 export {
   searchMovies,
   toggleMovies,
+  convertMoviesData,
   checkMoviesList,
   calculateCardsPerPage,
+  calculateCardsPageNumber,
 };

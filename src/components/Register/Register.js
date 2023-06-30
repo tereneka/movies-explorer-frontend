@@ -3,29 +3,22 @@ import './Register.css';
 import AuthLayout from '../AuthLayout/AuthLayout';
 import AuthFormInput from '../AuthFormInput/AuthFormInput';
 import { useForm } from '../../hooks/useForm';
+import { userNameRegexp } from '../../constants';
 
-function Register({ handleRegister }) {
+function Register({ handleRegister, error }) {
   const {
     values,
+    errors,
+    isValid,
     handleChange,
-    errMessages,
-    isTouched,
-  } = useForm([
-    { name: 'name' },
-    { name: 'email' },
-    { name: 'password' },
-  ]);
-  const isFormValid =
-    !Object.values(errMessages).some(
-      (err) => err
-    ) &&
-    Object.values(isTouched).some((item) => item);
+  } = useForm();
 
   return (
     <AuthLayout
       title='Добро пожаловать!'
       formName='register'
-      isFormValid={isFormValid}
+      isFormValid={isValid}
+      error={error}
       onSubmit={(e) => handleRegister(e, values)}>
       <AuthFormInput
         name='name'
@@ -33,8 +26,13 @@ function Register({ handleRegister }) {
         type='text'
         value={values.name}
         minLength={2}
+        pattern={userNameRegexp}
         onChange={handleChange}
-        errMessage={errMessages.name}
+        errMessage={
+          errors.name?.validity.patternMismatch
+            ? 'Текст может содержать только латиницу, кириллицу, пробел или дефис.'
+            : errors.name?.message
+        }
       />
       <AuthFormInput
         name='email'
@@ -42,7 +40,7 @@ function Register({ handleRegister }) {
         type='email'
         value={values.email}
         onChange={handleChange}
-        errMessage={errMessages.email}
+        errMessage={errors.email?.message}
       />
       <AuthFormInput
         name='password'
@@ -51,7 +49,7 @@ function Register({ handleRegister }) {
         value={values.password}
         minLength={8}
         onChange={handleChange}
-        errMessage={errMessages.password}
+        errMessage={errors.password?.message}
       />
     </AuthLayout>
   );

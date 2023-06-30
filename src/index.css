@@ -23,4 +23,6 @@ body {
   --border-radius-l: 16px;
   --border-radius-xl: 30px;
   --hover-opacity: 0.8;
+  --box-shadow: 0px 4px 4px rgba(50, 50, 71, 0.08),
+    0px 4px 8px rgba(50, 50, 71, 0.06);
 }

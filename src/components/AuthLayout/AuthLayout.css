@@ -21,6 +21,16 @@
   min-height: calc(100vh - 291px);
 }
 
+.auth-layout__err {
+  margin: 0 0;
+  font-size: 16px;
+  line-height: 18px;
+  color: var(--error-color);
+  min-height: 30px;
+  padding-bottom: 12px;
+  box-sizing: border-box;
+}
+
 .auth-layout__btn-group {
   padding-bottom: 70px;
   display: flex;
@@ -39,6 +49,10 @@
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
+}
+
+.auth-layout__btn_disabled {
+  opacity: 0.4;
 }
 
 .auth-layout__link-question {
@@ -90,7 +104,7 @@
   }
 
   .auth-layout__form {
-    min-height: calc(100vh - 287px);
+    min-height: calc(100vh - 257px);
   }
 
   .auth-layout__btn-group {

@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({ card, btnType, onAction }) {
+function MoviesCard({
+  card,
+  btnType,
+  btnText,
+  onCardClick,
+  onAction,
+}) {
+  const btnRef = useRef(null);
   return (
-    <li className='movies-card'>
+    <li
+      className='movies-card'
+      onClick={(e) =>
+        onCardClick(e, card, btnRef)
+      }>
       <div className='movies-card__header'>
         <h3 className='movies-card__name'>
           {card.nameRU}
@@ -14,14 +25,17 @@ function MoviesCard({ card, btnType, onAction }) {
       </div>
       <img
         className='movies-card__img'
-        src={`https://api.nomoreparties.co/${card.image.url}`}
+        src={card.image}
         alt={card.nameRU}
       />
       <div className='movies-card__footer'>
         <button
           className={`movies-card__btn movies-card__btn_type_${btnType}`}
-          onClick={() => onAction(card)}>
-          {btnType === 'save' && 'Сохранить'}
+          ref={btnRef}
+          onClick={(e) => {
+            onAction(card);
+          }}>
+          {btnText}
         </button>
       </div>
     </li>

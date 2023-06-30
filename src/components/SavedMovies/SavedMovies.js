@@ -1,32 +1,47 @@
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import More from '../More/More';
 import Preloader from '../Preloader/Preloader';
+import Message from '../Message/Message';
 
 function SavedMovies({
   moviesList,
   onSearchFormSubmit,
+  onToggleMovies,
   onResetSearchResult,
+  onCardClick,
   onCardAction,
   isLoad,
-  page,
+  message,
 }) {
+  const searchFormValues = JSON.parse(
+    sessionStorage.getItem('search_saved')
+  ) || {
+    keywords: '',
+    switch: true,
+  };
+
   return (
     <main>
-      {/* <SearchForm
+      <SearchForm
+        defaultValues={searchFormValues}
         onSubmit={onSearchFormSubmit}
+        onToggleSwitch={onToggleMovies}
         onResetResult={onResetSearchResult}
       />
-      {isLoad && page < 2 ? (
+      {isLoad ? (
         <Preloader />
+      ) : message.text ? (
+        <Message message={message} />
       ) : (
         <MoviesCardList
           list={moviesList}
           cardBtnType={(card) => 'delete'}
+          cardBtnText={(card) => ''}
+          onCardClick={onCardClick}
           onCardAction={onCardAction}
         />
-      )} */}
+      )}
     </main>
   );
 }

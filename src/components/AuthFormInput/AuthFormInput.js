@@ -7,6 +7,7 @@ function AuthFormInput({
   type,
   value,
   minLength,
+  pattern,
   onChange,
   errMessage,
 }) {
@@ -25,6 +26,7 @@ function AuthFormInput({
         onChange={onChange}
         required
         minLength={minLength}
+        pattern={pattern}
       />
       <span className='auth-form-input__err'>
         {errMessage}

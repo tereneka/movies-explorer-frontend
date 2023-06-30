@@ -1,55 +1,42 @@
 import { useState } from 'react';
 
-export function useForm(fields) {
+export function useForm(defaultValues = {}) {
   const [values, setValues] = useState(
-    getInputsObject()
+    defaultValues
   );
-  const [errMessages, setErrMessages] = useState(
-    getInputsObject('')
-  );
+  const [errors, setErrors] = useState({});
 
-  const [isTouched, setIsTouched] = useState(
-    getInputsObject(false)
-  );
+  const [isFocus, setIsFocus] = useState({});
 
-  const [isFocus, setIsFocus] = useState(
-    getInputsObject(false)
-  );
-
-  function getInputsObject(value) {
-    const res = {};
-
-    fields.forEach((field) => {
-      if (value !== undefined) {
-        res[field.name] = value;
-      } else {
-        res[field.name] =
-          field.defaultValue || '';
-      }
-    });
-
-    return res;
-  }
+  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (e) => {
+    const target = e.target;
     const {
       value,
       name,
       validationMessage,
+      validity,
       type,
       checked,
-    } = e.target;
+    } = target;
     if (type === 'checkbox') {
       setValues({ ...values, [name]: checked });
     } else {
       setValues({ ...values, [name]: value });
     }
 
-    setErrMessages({
-      ...errMessages,
-      [name]: validationMessage,
+    setErrors({
+      ...errors,
+      [name]: {
+        message: validationMessage,
+        validity,
+      },
     });
-    setIsTouched({ ...isTouched, [name]: true });
+
+    setIsValid(
+      target.closest('form').checkValidity()
+    );
   };
 
   const handleFocus = (e) => {
@@ -64,12 +51,12 @@ export function useForm(fields) {
 
   return {
     values,
-    setValues,
-    errMessages,
-    isTouched,
+    errors,
     isFocus,
+    isValid,
     handleChange,
     handleFocus,
     handleBlur,
+    setValues,
   };
 }

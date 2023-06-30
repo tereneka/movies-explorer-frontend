@@ -4,27 +4,20 @@ import { useForm } from '../../hooks/useForm';
 import AuthLayout from '../AuthLayout/AuthLayout';
 import AuthFormInput from '../AuthFormInput/AuthFormInput';
 
-function Login({ handleLogin }) {
+function Login({ handleLogin, error }) {
   const {
     values,
+    errors,
+    isValid,
     handleChange,
-    errMessages,
-    isTouched,
-  } = useForm([
-    { name: 'email' },
-    { name: 'password' },
-  ]);
-  const isFormValid =
-    !Object.values(errMessages).some(
-      (err) => err
-    ) &&
-    Object.values(isTouched).some((item) => item);
+  } = useForm();
 
   return (
     <AuthLayout
       title='Рады видеть!'
       formName='login'
-      isFormValid={isFormValid}
+      isFormValid={isValid}
+      error={error}
       onSubmit={(e) => handleLogin(e, values)}>
       <AuthFormInput
         name='email'
@@ -32,7 +25,7 @@ function Login({ handleLogin }) {
         type='email'
         value={values.email}
         onChange={handleChange}
-        errMessage={errMessages.email}
+        errMessage={errors.email?.message}
       />
       <AuthFormInput
         name='password'
@@ -41,7 +34,7 @@ function Login({ handleLogin }) {
         value={values.password}
         minLength={8}
         onChange={handleChange}
-        errMessage={errMessages.password}
+        errMessage={errors.password?.message}
       />
     </AuthLayout>
   );

@@ -11,11 +11,11 @@ function Movies({
   onSearchMovies,
   onToggleMovies,
   onResetSearchResult,
+  onCardClick,
   onCardAction,
   hasMoreBtn,
   onMoreBtnClick,
   isLoad,
-  page,
   message,
 }) {
   const searchFormValues = JSON.parse(
@@ -41,9 +41,13 @@ function Movies({
         <>
           <MoviesCardList
             list={moviesList}
-            cardBtnType={(card) =>
-              card.isSaved ? 'check' : 'save'
+            cardBtnType={(card) => card.type}
+            cardBtnText={(card) =>
+              card.type === 'save'
+                ? 'Сохранить'
+                : ''
             }
+            onCardClick={onCardClick}
             onCardAction={onCardAction}
           />{' '}
           {hasMoreBtn && (

@@ -14,17 +14,29 @@ function Navigation({
           isNavModalOpen
             ? 'navigation__burger-btn_invisible'
             : ''
+        } ${
+          isDarkTheme
+            ? 'navigation__burger-btn_theme_dark'
+            : ''
         }`}
         onClick={() => toggleNavModal(true)}
       />
       <div
-        className={`navigation-container ${
+        className={`navigation__container ${
           isNavModalOpen
-            ? 'navigation-container_visible'
+            ? 'navigation__container_visible'
+            : ''
+        } ${
+          isDarkTheme
+            ? 'navigation__container_theme_dark'
             : ''
         }`}>
         <button
-          className='navigation__close-btn'
+          className={`navigation__close-btn ${
+            isDarkTheme
+              ? 'navigation__close-btn_theme_dark'
+              : ''
+          }`}
           onClick={() => toggleNavModal(false)}
         />
         <nav>
@@ -35,6 +47,10 @@ function Navigation({
                   `navigation__link navigation__link_optional ${
                     isActive
                       ? 'navigation__link_active'
+                      : ''
+                  } ${
+                    isDarkTheme && isActive
+                      ? 'navigation__link_theme_dark'
                       : ''
                   }`
                 }

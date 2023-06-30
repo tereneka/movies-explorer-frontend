@@ -1,23 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Profile.css';
 import { useForm } from '../../hooks/useForm';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
 
-function Profile({ user, onSubmit }) {
+function Profile({ onSubmit, onLogout, error }) {
+  const user = useContext(UserContext);
   const {
     values,
     handleChange,
-    errMessages,
-    isTouched,
-  } = useForm([
-    { name: 'name', defaultValue: user.name },
-    { name: 'email', defaultValue: user.email },
-  ]);
-  const isFormValid =
-    !Object.values(errMessages).some(
-      (err) => err
-    ) &&
-    Object.values(isTouched).some((item) => item);
+    errors,
+    isValid,
+  } = useForm({
+    name: user.name,
+    email: user.email,
+  });
 
   return (
     <main>
@@ -42,7 +39,10 @@ function Profile({ user, onSubmit }) {
               />
             </label>
             <span className='profile__input-err'>
-              {errMessages.name}
+              {errors.name?.validity
+                .patternMismatch
+                ? 'Текст может содержать только латиницу, кириллицу, пробел или дефис.'
+                : errors.name?.message}
             </span>
             <label className='profile__input-label'>
               E-mail
@@ -56,21 +56,24 @@ function Profile({ user, onSubmit }) {
               />
             </label>
             <span className='profile__input-err'>
-              {errMessages.email}
+              {errors.email?.message}
             </span>
           </div>
+
+          <p className='profile__err'>{error}</p>
 
           <div className='profile__btn-group'>
             <button
               className='profile__btn profile__btn_type_submit'
               type='submit'
-              disabled={!isFormValid}>
+              disabled={!isValid}>
               Редактировать
             </button>
 
             <Link
               className='profile__btn profile__btn_type_cancel'
-              to='/movies'>
+              to='/'
+              onClick={onLogout}>
               Выйти из аккаунта
             </Link>
           </div>
