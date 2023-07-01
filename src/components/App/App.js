@@ -389,6 +389,7 @@ function App() {
     handleMovieCardSave(card) {
       const newCard = { ...card };
       delete newCard.type;
+
       mainApi
         .saveMovie(newCard)
         .then((data) => {
@@ -403,6 +404,7 @@ function App() {
             data,
             ...savedMoviesList,
           ];
+
           setSavedMoviesList(newSavedMoviesList);
           setRenderedSavedMoviesList(
             newSavedMoviesList
@@ -414,6 +416,9 @@ function App() {
               ...moviesStorageData,
               moviesList: newMoviesList,
             })
+          );
+          setSavedMoviesPageMessage(
+            defaultMoviesPageMessage
           );
           sessionStorage.removeItem(
             'search_saved'
@@ -439,13 +444,24 @@ function App() {
       mainApi
         .deleteMovie(id)
         .then(() => {
-          const newMoviesList = [
-            ...toggledMoviesList,
-            (toggledMoviesList.find(
-              (movie) =>
-                movie.movieId === card.movieId
-            ).type = 'save'),
-          ];
+          if (moviesStorageData) {
+            const newMoviesList = [
+              ...toggledMoviesList,
+              (toggledMoviesList.find(
+                (movie) =>
+                  movie.movieId === card.movieId
+              ).type = 'save'),
+            ];
+
+            setToggledMoviesList(newMoviesList);
+            sessionStorage.setItem(
+              'search',
+              JSON.stringify({
+                ...moviesStorageData,
+                moviesList: newMoviesList,
+              })
+            );
+          }
 
           function filterSavedMoviesList(list) {
             return [
@@ -462,14 +478,6 @@ function App() {
             filterSavedMoviesList(
               renderedSavedMoviesList
             )
-          );
-          setToggledMoviesList(newMoviesList);
-          sessionStorage.setItem(
-            'search',
-            JSON.stringify({
-              ...moviesStorageData,
-              moviesList: newMoviesList,
-            })
           );
         })
         .catch(() => {
@@ -526,7 +534,7 @@ function App() {
         .catch((err) =>
           setServerError(
             err === 401
-              ? 'Неверный Email или пароль. Попробуйте ещё раз.'
+              ? 'Неверный email или пароль. Попробуйте ещё раз.'
               : messages.defaultError
           )
         );
@@ -623,8 +631,9 @@ function App() {
         );
 
         if (
-          moviesStorageData.message.isError &&
-          moviesStorageData.moviesList.length < 1
+          moviesStorageData?.message?.isError &&
+          moviesStorageData?.moviesList?.length <
+            1
         ) {
           callbacks.handleSearchMovies(null, {
             keywords: moviesStorageData.keywords,

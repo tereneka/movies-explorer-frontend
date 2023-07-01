@@ -35,7 +35,7 @@ function Movies({
       />
       {isLoad ? (
         <Preloader />
-      ) : message.text ? (
+      ) : message?.text ? (
         <Message message={message} />
       ) : (
         <>
