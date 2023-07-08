@@ -1,0 +1,19 @@
+.message {
+  padding: 50px var(--side-padding-l);
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+}
+
+@media screen and (max-width: 900px) {
+  .message {
+    padding: 50px 30px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .message {
+    padding: 50px 10px;
+  }
+}
