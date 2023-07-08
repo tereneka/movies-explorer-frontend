@@ -3,8 +3,9 @@ import './Login.css';
 import { useForm } from '../../hooks/useForm';
 import AuthLayout from '../AuthLayout/AuthLayout';
 import AuthFormInput from '../AuthFormInput/AuthFormInput';
+import { EMAIL_REGEXP } from '../../constants';
 
-function Login({ handleLogin, error }) {
+function Login({ handleLogin, error, isLoad }) {
   const {
     values,
     errors,
@@ -18,14 +19,21 @@ function Login({ handleLogin, error }) {
       formName='login'
       isFormValid={isValid}
       error={error}
-      onSubmit={(e) => handleLogin(e, values)}>
+      onSubmit={(e) => handleLogin(e, values)}
+      isLoad={isLoad}>
       <AuthFormInput
         name='email'
         label='E-mail'
-        type='email'
+        type='text'
+        pattern={EMAIL_REGEXP}
         value={values.email}
         onChange={handleChange}
-        errMessage={errors.email?.message}
+        errMessage={
+          errors.email?.validity.patternMismatch
+            ? 'Введите email.'
+            : errors.email?.message
+        }
+        disabled={isLoad}
       />
       <AuthFormInput
         name='password'
@@ -35,6 +43,7 @@ function Login({ handleLogin, error }) {
         minLength={8}
         onChange={handleChange}
         errMessage={errors.password?.message}
+        disabled={isLoad}
       />
     </AuthLayout>
   );

@@ -3,9 +3,16 @@ import './Register.css';
 import AuthLayout from '../AuthLayout/AuthLayout';
 import AuthFormInput from '../AuthFormInput/AuthFormInput';
 import { useForm } from '../../hooks/useForm';
-import { userNameRegexp } from '../../constants';
+import {
+  EMAIL_REGEXP,
+  USER_NAME_REGEXP,
+} from '../../constants';
 
-function Register({ handleRegister, error }) {
+function Register({
+  handleRegister,
+  error,
+  isLoad,
+}) {
   const {
     values,
     errors,
@@ -19,28 +26,36 @@ function Register({ handleRegister, error }) {
       formName='register'
       isFormValid={isValid}
       error={error}
-      onSubmit={(e) => handleRegister(e, values)}>
+      onSubmit={(e) => handleRegister(e, values)}
+      isLoad={isLoad}>
       <AuthFormInput
         name='name'
         label='Имя'
         type='text'
         value={values.name}
         minLength={2}
-        pattern={userNameRegexp}
+        pattern={USER_NAME_REGEXP}
         onChange={handleChange}
         errMessage={
           errors.name?.validity.patternMismatch
             ? 'Текст может содержать только латиницу, кириллицу, пробел или дефис.'
             : errors.name?.message
         }
+        disabled={isLoad}
       />
       <AuthFormInput
         name='email'
         label='E-mail'
-        type='email'
+        type='text'
+        pattern={EMAIL_REGEXP}
         value={values.email}
         onChange={handleChange}
-        errMessage={errors.email?.message}
+        errMessage={
+          errors.email?.validity.patternMismatch
+            ? 'Введите email.'
+            : errors.email?.message
+        }
+        disabled={isLoad}
       />
       <AuthFormInput
         name='password'
@@ -50,6 +65,7 @@ function Register({ handleRegister, error }) {
         minLength={8}
         onChange={handleChange}
         errMessage={errors.password?.message}
+        disabled={isLoad}
       />
     </AuthLayout>
   );

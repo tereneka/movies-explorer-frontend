@@ -19,10 +19,10 @@ function Movies({
   message,
 }) {
   const searchFormValues = JSON.parse(
-    sessionStorage.getItem('search')
+    localStorage.getItem('search')
   ) || {
     keywords: '',
-    switch: true,
+    switch: false,
   };
 
   return (
@@ -32,6 +32,7 @@ function Movies({
         onSubmit={onSearchMovies}
         onToggleSwitch={onToggleMovies}
         onResetResult={onResetSearchResult}
+        isLoad={isLoad}
       />
       {isLoad ? (
         <Preloader />

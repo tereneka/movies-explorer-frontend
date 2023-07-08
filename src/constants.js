@@ -43,13 +43,16 @@ const defaultMoviesPageMessage = {
   isError: false,
 };
 
-const userNameRegexp =
+const USER_NAME_REGEXP =
   '^[A-Za-zА-Яа-яЁё\\-\\s]+$';
 
+const EMAIL_REGEXP =
+  '[A-z0-9_\\.\\-]{1,}@[A-z0-9_\\.\\-]{1,}\\.[A-z]{2,6}';
 export {
   techs,
   portfoloiList,
   messages,
   defaultMoviesPageMessage,
-  userNameRegexp,
+  USER_NAME_REGEXP,
+  EMAIL_REGEXP,
 };

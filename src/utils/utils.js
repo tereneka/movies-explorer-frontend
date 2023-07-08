@@ -7,10 +7,10 @@ function searchMovies(data, keywords) {
 }
 
 function toggleMovies(moviesList, isSwitchOn) {
-  return isSwitchOn
+  return !isSwitchOn
     ? moviesList
     : moviesList.filter(
-        (movie) => movie.duration > 40
+        (movie) => movie.duration < 40
       );
 }
 

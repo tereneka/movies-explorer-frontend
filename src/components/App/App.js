@@ -37,10 +37,10 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const moviesStorageData = JSON.parse(
-    sessionStorage.getItem('search')
+    localStorage.getItem('search')
   );
   const savedMoviesStorageData = JSON.parse(
-    sessionStorage.getItem('search_saved')
+    localStorage.getItem('search_saved')
   );
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -50,6 +50,8 @@ function App() {
   });
   const [isAppLoad, setIsAppLoad] =
     useState(true);
+  const [isRequest, setIsRequest] =
+    useState(false);
   const [isAlertVisible, setIsAlertVisible] =
     useState(false);
   const [isNavModalOpen, setIsNavModalOpen] =
@@ -107,6 +109,11 @@ function App() {
     setSavedMoviesPageMessage,
   ] = useState(defaultMoviesPageMessage);
 
+  const [
+    profilePageMessage,
+    setProfilePageMessage,
+  ] = useState('');
+
   const isDarkTheme = location === '/';
   const isFooter =
     location === '/' ||
@@ -147,7 +154,7 @@ function App() {
             isError: false,
           });
 
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...values,
@@ -166,7 +173,7 @@ function App() {
             isError: true,
           });
 
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...values,
@@ -178,7 +185,7 @@ function App() {
             })
           );
         } else {
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...values,
@@ -207,7 +214,7 @@ function App() {
               isError: true,
             });
 
-            sessionStorage.setItem(
+            localStorage.setItem(
               'search',
               JSON.stringify({
                 ...values,
@@ -247,7 +254,7 @@ function App() {
             isError: false,
           });
 
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...moviesStorageData,
@@ -259,7 +266,7 @@ function App() {
             })
           );
         } else {
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...moviesStorageData,
@@ -290,7 +297,7 @@ function App() {
           isError: false,
         });
 
-        sessionStorage.setItem(
+        localStorage.setItem(
           'search_saved',
           JSON.stringify({
             ...values,
@@ -302,7 +309,7 @@ function App() {
           })
         );
       } else {
-        sessionStorage.setItem(
+        localStorage.setItem(
           'search_saved',
           JSON.stringify({
             ...values,
@@ -338,7 +345,7 @@ function App() {
           isError: false,
         });
 
-        sessionStorage.setItem(
+        localStorage.setItem(
           'search_saved',
           JSON.stringify({
             keywords:
@@ -353,7 +360,7 @@ function App() {
           })
         );
       } else {
-        sessionStorage.setItem(
+        localStorage.setItem(
           'search_saved',
           JSON.stringify({
             keywords:
@@ -379,7 +386,7 @@ function App() {
         defaultMoviesPageMessage
       );
       setRenderedSavedMoviesList(savedMoviesList);
-      sessionStorage.removeItem('search_saved');
+      localStorage.removeItem('search_saved');
       setValues({
         keywords: '',
         switch: true,
@@ -395,11 +402,12 @@ function App() {
         .then((data) => {
           const newMoviesList = [
             ...toggledMoviesList,
-            (toggledMoviesList.find(
-              (movie) =>
-                movie.movieId === data.movieId
-            ).type = 'saved'),
           ];
+          newMoviesList.find(
+            (movie) =>
+              movie.movieId === data.movieId
+          ).type = 'saved';
+
           const newSavedMoviesList = [
             data,
             ...savedMoviesList,
@@ -410,7 +418,7 @@ function App() {
             newSavedMoviesList
           );
           setToggledMoviesList(newMoviesList);
-          sessionStorage.setItem(
+          localStorage.setItem(
             'search',
             JSON.stringify({
               ...moviesStorageData,
@@ -420,9 +428,7 @@ function App() {
           setSavedMoviesPageMessage(
             defaultMoviesPageMessage
           );
-          sessionStorage.removeItem(
-            'search_saved'
-          );
+          localStorage.removeItem('search_saved');
         })
         .catch(() => {
           setServerError(messages.defaultError);
@@ -447,14 +453,14 @@ function App() {
           if (moviesStorageData) {
             const newMoviesList = [
               ...toggledMoviesList,
-              (toggledMoviesList.find(
-                (movie) =>
-                  movie.movieId === card.movieId
-              ).type = 'save'),
             ];
+            newMoviesList.find(
+              (movie) =>
+                movie.movieId === card.movieId
+            ).type = 'save';
 
             setToggledMoviesList(newMoviesList);
-            sessionStorage.setItem(
+            localStorage.setItem(
               'search',
               JSON.stringify({
                 ...moviesStorageData,
@@ -501,7 +507,9 @@ function App() {
     },
 
     handleRegister(e, values) {
+      setIsRequest(true);
       e.preventDefault();
+
       mainApi
         .register(values)
         .then((data) => {
@@ -517,10 +525,12 @@ function App() {
               ? messages.conflictError
               : messages.defaultError
           )
-        );
+        )
+        .finally(() => setIsRequest(false));
     },
 
     handleLogin(e, values) {
+      setIsRequest(true);
       e.preventDefault();
       mainApi
         .login(values)
@@ -537,30 +547,46 @@ function App() {
               ? 'Неверный email или пароль. Попробуйте ещё раз.'
               : messages.defaultError
           )
-        );
+        )
+        .finally(() => setIsRequest(false));
     },
 
     handleLogout() {
+      setIsRequest(true);
       mainApi
         .logout()
         .then(() => {
           setLoggedIn(false);
           setUser({});
-          sessionStorage.clear();
+          localStorage.clear();
         })
         .catch(() =>
           setServerError(messages.defaultError)
-        );
+        )
+        .finally(() => setIsRequest(false));
     },
 
     handleEditProfile(e, values) {
+      setIsRequest(true);
       e.preventDefault();
+      setProfilePageMessage('');
       mainApi
         .editProfile(values)
-        .then((data) => setUser(data))
+        .then((data) => {
+          setUser(data);
+          setProfilePageMessage(
+            'Данные профиля успешно изменены.'
+          );
+          setTimeout(() => {
+            setProfilePageMessage('');
+          }, 2000);
+        })
         .catch(() =>
-          setServerError(messages.defaultError)
-        );
+          setProfilePageMessage(
+            messages.defaultError
+          )
+        )
+        .finally(() => setIsRequest(false));
     },
   };
 
@@ -685,6 +711,7 @@ function App() {
   useEffect(() => {
     // очистка стэйта ошибки при смене страницы
     setServerError('');
+    setProfilePageMessage('');
   }, [location]);
 
   // персчёт количества карточек при изменении ширины экрана
@@ -829,7 +856,10 @@ function App() {
                         onLogout={
                           callbacks.handleLogout
                         }
-                        error={serverError}
+                        message={
+                          profilePageMessage
+                        }
+                        isLoad={isRequest}
                       />
                     }
                   />
@@ -851,6 +881,7 @@ function App() {
                           callbacks.handleRegister
                         }
                         error={serverError}
+                        isLoad={isRequest}
                       />
                     }
                   />
@@ -862,6 +893,7 @@ function App() {
                           callbacks.handleLogin
                         }
                         error={serverError}
+                        isLoad={isRequest}
                       />
                     }
                   />

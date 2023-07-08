@@ -25,7 +25,6 @@ export function useForm(defaultValues = {}) {
     } else {
       setValues({ ...values, [name]: value });
     }
-
     setErrors({
       ...errors,
       [name]: {

@@ -10,6 +10,7 @@ function AuthLayout({
   error,
   onSubmit,
   children,
+  isLoad,
 }) {
   const isRegisterForm = formName === 'register';
 
@@ -43,7 +44,7 @@ function AuthLayout({
                   : ''
               }`}
               type='submit'
-              disabled={!isFormValid}>
+              disabled={!isFormValid || isLoad}>
               {isRegisterForm
                 ? 'Зарегистрироваться'
                 : 'Войти'}

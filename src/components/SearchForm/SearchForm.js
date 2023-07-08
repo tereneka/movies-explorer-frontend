@@ -7,6 +7,7 @@ function SearchForm({
   onSubmit,
   onToggleSwitch,
   onResetResult,
+  isLoad,
 }) {
   const {
     values,
@@ -56,7 +57,7 @@ function SearchForm({
         <button
           className='search-form__serch-btn'
           type='submit'
-          disabled={!isValid}>
+          disabled={!isValid || isLoad}>
           Поиск
         </button>
       </div>

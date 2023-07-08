@@ -10,6 +10,7 @@ function AuthFormInput({
   pattern,
   onChange,
   errMessage,
+  disabled,
 }) {
   return (
     <label className='auth-form-input'>
@@ -27,6 +28,7 @@ function AuthFormInput({
         required
         minLength={minLength}
         pattern={pattern}
+        disabled={disabled}
       />
       <span className='auth-form-input__err'>
         {errMessage}

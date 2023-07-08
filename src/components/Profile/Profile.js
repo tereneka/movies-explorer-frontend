@@ -3,8 +3,14 @@ import './Profile.css';
 import { useForm } from '../../hooks/useForm';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
+import { EMAIL_REGEXP } from '../../constants';
 
-function Profile({ onSubmit, onLogout, error }) {
+function Profile({
+  onSubmit,
+  onLogout,
+  message,
+  isLoad,
+}) {
   const user = useContext(UserContext);
   const {
     values,
@@ -36,6 +42,7 @@ function Profile({ onSubmit, onLogout, error }) {
                 onChange={handleChange}
                 required
                 minLength={2}
+                disabled={isLoad}
               />
             </label>
             <span className='profile__input-err'>
@@ -52,7 +59,15 @@ function Profile({ onSubmit, onLogout, error }) {
                 value={values.email}
                 onChange={handleChange}
                 required
-                type='email'
+                type='text'
+                pattern={EMAIL_REGEXP}
+                errMessage={
+                  errors.email?.validity
+                    .patternMismatch
+                    ? 'Введите email.'
+                    : errors.email?.message
+                }
+                disabled={isLoad}
               />
             </label>
             <span className='profile__input-err'>
@@ -60,20 +75,28 @@ function Profile({ onSubmit, onLogout, error }) {
             </span>
           </div>
 
-          <p className='profile__err'>{error}</p>
+          <p className='profile__err'>
+            {message}
+          </p>
 
           <div className='profile__btn-group'>
             <button
               className='profile__btn profile__btn_type_submit'
               type='submit'
-              disabled={!isValid}>
+              disabled={
+                !isValid ||
+                (values.name === user.name &&
+                  values.email === user.email) ||
+                isLoad
+              }>
               Редактировать
             </button>
 
             <Link
               className='profile__btn profile__btn_type_cancel'
               to='/'
-              onClick={onLogout}>
+              onClick={onLogout}
+              aria-disabled={isLoad}>
               Выйти из аккаунта
             </Link>
           </div>
